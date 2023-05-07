@@ -1,5 +1,5 @@
 **Create a prim.json file in a folder containing the system of interest**
-`
+```
 {
   "basis" : [
     {
@@ -16,4 +16,4 @@
   ],
   "title" : "FCC"
 }
-`
+```

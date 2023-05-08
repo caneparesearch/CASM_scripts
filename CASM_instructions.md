@@ -17,3 +17,8 @@
   "title" : "FCC"
 }
 ```
+
+Enumerate supercell data
+```
+casm enum --method ConfigEnumAllOccupations --min 16 --max 16 --filter 'eq(comp(a),0.125)'
+```

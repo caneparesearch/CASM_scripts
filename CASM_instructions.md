@@ -46,3 +46,61 @@ casm select --set-on -c ALL
 casm-calc --setup
 ```
 Second command will give an error, but this is okay as it will create all the structures in the training_data file
+Now we can use pymatgen to generate the VASP input files in the training_data folder and transfer them to any cluster to submit the jobs.
+Example of write_vasp_input.py script to be used in the training_data folder:
+```
+import glob, json, os
+from pymatgen.io.vasp.sets import MITRelaxSet
+from pymatgen.core.structure import Structure
+
+incar_mod = {"NCORE":16, "ALGO":"Fast", "ISMEAR":1, "ISPIN":1, "ISYM":0, "ICHARG":2, "SIGMA":0.2, "EDIFF":1e-06, "SYMPREC":1e-09,
+    "LREAL":False,"LSCALAPACK":False}
+
+filenames = glob.glob("*/*/structure.json")
+
+for i in filenames:
+    with open(i, "r") as f:
+        data = json.load(f)
+    structure = Structure(lattice=data["lattice_vectors"],species=data["atom_type"],coords=data["atom_coords"],coords_are_cartesian=True)
+    dir_name = os.path.dirname(i)
+    relax = MITRelaxSet(structure,user_incar_settings=incar_mod, user_kpoints_settings={"grid_density":5000},force_gamma=True)
+    relax.write_input(output_dir=dir_name, make_dir_if_not_present=False,include_cif=True)
+```
+Once calculations are done, transfer them back to the same folder. At this point, vasp_relax_report is broken so we can manually write a vasp_relax_report.py script to get the properties.calc.json file for each calculation:
+```
+from pymatgen.io.vasp.outputs import Outcar, Vasprun
+import json, glob, os
+import warnings
+warnings.filterwarnings("ignore")
+
+filenames = glob.glob("*/*/vasprun.xml.relaxed.gz")
+for i in filenames:
+    dir_name = os.path.dirname(i)
+    print(f"Begin VASP relax report for {dir_name}")
+    
+    outcar = Outcar(f"{dir_name}/OUTCAR.relaxed.gz")
+    vasprun = Vasprun(f"{dir_name}/vasprun.xml.relaxed.gz")
+        
+    data_new = {}
+    data_new["global_properties"] = {} 
+    data_new["global_properties"]["energy"] = {}
+    data_new["global_properties"]["energy"]["value"] = outcar.final_energy_wo_entrp
+    structure = vasprun.final_structure
+    data_new["atom_type"] = [str(x) for x in structure.species]
+    data_new["mol_type"] = [str(x) for x in structure.species]
+    data_new["coordinate_mode"] = "direct"
+    data_new["lattice_vectors"] = structure.lattice.matrix.tolist()
+    data_new["atom_coords"] = structure.frac_coords.tolist()
+    data_new["mol_coords"] = structure.frac_coords.tolist()
+    
+    with open(f"{dir_name}/calctype.default/properties.calc.json", "w") as f:
+        json.dump(data_new, f, indent=4)
+```
+Use ```casm update``` to update the configurations to the master list.
+
+# 5. Fit cluster expansion
+Create a new directory 'fit' and move into the directory. Select all configurations.
+```
+casm select --set is_calculated -o train
+casm query -c ALL -k formation_energy corr -o casm_learn_input
+```

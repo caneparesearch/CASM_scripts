@@ -1,4 +1,7 @@
-# 1. Create a prim.json file in a folder containing the system of interest
+# CASM v1.3.0 instructions
+IMPORTANT: As of CASM v1.3.0, importing pre-calculated structures is not working. Do not use CASM v1.3.0 if you are importing pre-calculated structures.
+
+## 1. Create a prim.json file in a folder containing the system of interest
 ```
 {
   "basis" : [
@@ -23,7 +26,7 @@ casm composition --calc
 casm composition --select 1
 ```
 
-# 3. Enumerate supercell data
+## 3. Enumerate supercell data
 --min and --max sets minimum and maximum supercell size
 --filter includes filtering according to some criteria
 ```
@@ -34,7 +37,7 @@ To enumerate for a specific composition:
 casm enum --method ConfigEnumAllOccupations --min 16 --max 16 --filter 'eq(comp(a),0.125)'
 ```
 
-# 4. Perform DFT calculations
+## 4. Perform DFT calculations
 Firstly create an arbritary calc.json file at training_data/settings/calctype.default/
 ```
 {"software":"vasp",
@@ -98,9 +101,12 @@ for i in filenames:
 ```
 Use ```casm update``` to update the configurations to the master list.
 
-# 5. Fit cluster expansion
+## 5. Fit cluster expansion
 Create a new directory 'fit' and move into the directory. Select all configurations.
 ```
 casm select --set is_calculated -o train
-casm query -c ALL -k formation_energy corr -o casm_learn_input
+```
+It is recommeneded to remove those structures with unstable relaxations for the cluster expansion model. To do so, go into the train file and deselect them. The list of unstable structures can be found in the reports folder. Then select these structures for fitting.
+```
+casm query -c train -k formation_energy corr -o casm_learn_input
 ```

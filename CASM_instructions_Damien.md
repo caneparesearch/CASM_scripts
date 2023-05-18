@@ -174,3 +174,5 @@ We are using custom weights, so put a weight field into casm_learn_input which c
 tune_weight.py enables you to change the weight of a specific structure
 energy.py {composition} enables you to query the error of the fit at a specific composition
 optimize_weight.py is a script to optimize a set of weights using Bayesian Optimization
+
+## 6. Monte Carlo calculations

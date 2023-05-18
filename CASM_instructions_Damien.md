@@ -1,5 +1,5 @@
-# CASM v1.3.0 instructions
-IMPORTANT: As of CASM v1.3.0, importing pre-calculated structures is not working. Do not use CASM v1.3.0 if you are importing pre-calculated structures.
+# CASM v1.2.0 instructions
+IMPORTANT: As of CASM v1.2.0, importing pre-calculated structures is not working. Do not use CASM v1.3.0 if you are importing pre-calculated structures.
 
 ## 1. Create a prim.json file in a folder containing the system of interest
 ```

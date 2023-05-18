@@ -20,7 +20,7 @@ IMPORTANT: As of CASM v1.3.0, importing pre-calculated structures is not working
   "title" : "FCC"
 }
 ```
-# 2. Create composition axes
+## 2. Create composition axes
 ```
 casm composition --calc
 casm composition --select 1
@@ -102,6 +102,33 @@ for i in filenames:
 Use ```casm update``` to update the configurations to the master list.
 
 ## 5. Fit cluster expansion
+Create the basis set in basis_sets/bset.default/bspecs.json. The recommended value for pairwise basis functions is the radius of the sphere that completely circumscribes the _largest_ supercell you have in your training data. In other words, the longest distance possible in the _largest_ supercell divided by 2.
+```
+{
+  "basis_function_specs" : {
+    "global_max_poly_order": 4,
+    "dof_specs": {
+      "occ": {
+        "site_basis_functions" : "chebychev"
+      }
+    }
+  },
+  "cluster_specs": {
+    "method": "periodic_max_length",
+    "params": {
+      "orbit_branch_specs": {
+        "2" : {"max_length" : 12.0000},
+	"3" : {"max_length" : 7.00000},
+	"4" : {"max_length" : 6.00000}
+      }
+    }
+  }
+}
+```
+Create the basis set
+```
+casm bset -u
+```
 Create a new directory 'fit' and move into the directory. Select all configurations.
 ```
 casm select --set is_calculated -o train
@@ -110,3 +137,40 @@ It is recommeneded to remove those structures with unstable relaxations for the 
 ```
 casm query -c train -k formation_energy corr -o casm_learn_input
 ```
+Create a fit.json file with parameters for fitting
+```
+{
+    "estimator": {
+        "method": "Lasso",
+        "kwargs": {
+            "alpha": 0.00001,
+            "max_iter": 1000000
+        }
+    },
+    "feature_selection": {
+        "method": "SelectFromModel",
+        "kwargs": null
+    },
+    "problem_specs": {
+        "data": {
+            "y": "formation_energy",
+            "X": "corr",
+            "kwargs": null,
+            "type": "selection",
+            "filename": "casm_learn_input"
+        },
+        "weight": {
+            "method": "wCustom"
+        },
+        "cv": {
+            "penalty": 0,
+            "method": "LeaveOneOut"
+        }
+    },
+    "n_halloffame": 25
+}
+```
+We are using custom weights, so put a weight field into casm_learn_input which contains all the weights. This function is implemented in tune_weight.py
+tune_weight.py enables you to change the weight of a specific structure
+energy.py {composition} enables you to query the error of the fit at a specific composition
+optimize_weight.py is a script to optimize a set of weights using Bayesian Optimization

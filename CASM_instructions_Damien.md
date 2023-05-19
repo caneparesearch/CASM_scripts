@@ -175,4 +175,9 @@ We are using custom weights, so put a weight field into casm_learn_input which c
 * energy.py {composition} enables you to query the error of the fit at a specific composition
 * optimize_weight.py is a script to optimize a set of weights using Bayesian Optimization
 
+If casm gives an error saying eci.json does not exist, create the eci using:
+```
+casm settings --new-eci default
+```
+
 ## 6. Monte Carlo calculations

@@ -101,6 +101,8 @@ for i in filenames:
 ```
 Use ```casm update``` to update the configurations to the master list.
 
+Then set chemical references for formation energy calculation using ```casm ref --set-auto```.
+
 ## 5. Fit cluster expansion
 Create the basis set in basis_sets/bset.default/bspecs.json. The recommended value for pairwise basis functions is the radius of the sphere that completely circumscribes the _largest_ supercell you have in your training data. In other words, the longest distance possible in the _largest_ supercell divided by 2.
 ```

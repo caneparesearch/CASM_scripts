@@ -183,3 +183,90 @@ casm settings --new-eci default
 ```
 
 ## 6. Monte Carlo calculations
+Copy casm_learn_input to a new directory "monte" and move to the directory. Create a monte.json file:
+```
+{
+    "comment" : "Built from example",
+    "debug" : false,
+    "ensemble" : "grand_canonical",
+    "method" : "metropolis",
+    "model" : {
+      "formation_energy" : "formation_energy"
+    },
+    "supercell" : [
+      [16, 0, 0],
+      [0, 16, 0],
+      [0, 0, 16]
+    ],
+    "data" : {
+      "sample_by" : "pass",
+      "sample_period" : 1,
+      "min_pass" : 1000,
+      "max_pass" : 10000,
+      "confidence" : 0.95,
+      "measurements" : [
+        {
+          "quantity" : "formation_energy",
+          "precision" : 1e-3
+        },
+        {
+          "quantity" : "potential_energy",
+          "precision" : 1e-3
+        },
+        {
+          "quantity" : "clex_hull_dist(casm_learn_input,comp)",
+          "precision" : 1e-3
+        },
+        {
+          "quantity" : "atom_frac"
+        },
+        {
+          "quantity" : "site_frac"
+        },
+        {
+          "quantity" : "comp",
+          "precision" : 1e-3
+        },
+        {
+          "quantity" : "comp_n"
+        }
+      ],
+      "storage" : {
+        "write_observations" : false,
+        "write_trajectory" : false,
+        "output_format" : ["csv", "json"]
+      }
+    },
+    "driver" : {
+      "mode" : "incremental",
+      "motif" : {
+        "configname" : "auto"
+      },
+      "initial_conditions" : {
+        "param_chem_pot" : {
+          "a" : -0.5,
+          "b" : 0
+        },
+        "temperature" : 5,
+        "tolerance" : 0.001
+      },
+      "final_conditions" : {
+        "param_chem_pot" : {
+          "a" : 0.7,
+          "b" : 0
+        },
+        "temperature" : 5,
+        "tolerance" : 0.001
+      },
+      "incremental_conditions" : {
+        "param_chem_pot" : {
+          "a" : 0.05,
+          "b" : 0
+        },
+        "temperature" : 0,
+        "tolerance" : 0.001
+      }
+    }
+  }
+```
+The above file is for low T to verify that GCMC can reproduce the convex hull. Set $\mu$ by changing the initial conditions and final conditions of "a"

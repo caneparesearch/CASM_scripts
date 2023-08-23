@@ -1,5 +1,5 @@
 # CASM v1.2.0 instructions
-IMPORTANT: As of CASM v1.2.0, importing pre-calculated structures is not working. Do not use CASM v1.3.0 if you are importing pre-calculated structures.
+This file provides instructions for using CASM v1.2.0, which contains some unresolved issues.
 
 ## 1. Create a prim.json file in a folder containing the system of interest
 ```
@@ -103,7 +103,15 @@ Use ```casm update``` to update the configurations to the master list.
 
 Then set chemical references for formation energy calculation using ```casm ref --set-auto```.
 
-## 5. Fit cluster expansion
+## 5. (Optional) Import VASP data
+If you have pre-calculated VASP data, you can import the structures into CASM. Firstly run the vasp_relax_report.py code above to generate the properties.calc.json file for each calculation. Then write a list of the path of the POSCAR files using ```find $(readlink -f .) -name "POSCAR" > DFT_data```
+Then run the following command:
+```
+casm import --batch DFT_data
+```
+CASM will attempt to map your POCAR files into a configuration. Ensure that the properties.calc.json file is written correctly.
+
+## 6. Fit cluster expansion
 Create the basis set in basis_sets/bset.default/bspecs.json. The recommended value for pairwise basis functions is the radius of the sphere that completely circumscribes the _largest_ supercell you have in your training data. In other words, the longest distance possible in the _largest_ supercell divided by 2.
 ```
 {
@@ -182,7 +190,7 @@ If casm gives an error saying eci.json does not exist, create the eci using:
 casm settings --new-eci default
 ```
 
-## 6. Monte Carlo calculations
+## 7. Monte Carlo calculations
 Copy casm_learn_input to a new directory "monte" and move to the directory. Create a monte.json file:
 ```
 {
@@ -269,4 +277,4 @@ Copy casm_learn_input to a new directory "monte" and move to the directory. Crea
     }
   }
 ```
-The above file is for low T to verify that GCMC can reproduce the convex hull. Set $\mu$ by changing the initial conditions and final conditions of "a"
+The above file is for low T to verify that GCMC can reproduce the convex hull. Set $\mu$ by changing the initial conditions and final conditions of "a". Ensure the $\mu$ range can cover the whole composition range.

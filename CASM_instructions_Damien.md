@@ -104,10 +104,35 @@ Use ```casm update``` to update the configurations to the master list.
 Then set chemical references for formation energy calculation using ```casm ref --set-auto```.
 
 ## 5. (Optional) Import VASP data
-If you have pre-calculated VASP data, you can import the structures into CASM. Firstly run the vasp_relax_report.py code above to generate the properties.calc.json file for each calculation. Then write a list of the path of the POSCAR files using ```find $(readlink -f .) -name "POSCAR" > DFT_data```
+If you have pre-calculated VASP data, you can import the structures into CASM. Firstly run the vasp_relax_report.py code above to generate the properties.calc.json file for each calculation. Then write a list of the path of the POSCAR files using ```find $(readlink -f .) -name "properties.calc.json" > DFT_data```
+Create a settings.json file:
+```
+{
+  "data" : {
+    "copy_additional_files" : true,
+    "copy_structure_files" : true,
+    "import_properties" : true,
+    "overwrite" : true
+  },
+  "mapping" : {
+    "cost_tol" : 0.000010000000,
+    "fix_lattice" : false,
+    "fix_volume" : false,
+    "ideal" : false,
+    "k_best" : 1,
+    "lattice_weight" : 0.500000000000,
+    "max_va_frac" : 0.500000000000,
+    "max_vol_change" : 0.300000000000,
+    "min_va_frac" : 0.000000000000,
+    "primitive_only" : false,
+    "robust" : false,
+    "strict" : false
+  }
+}
+```
 Then run the following command:
 ```
-casm import --batch DFT_data
+casm import --batch DFT_data -s settings.json
 ```
 CASM will attempt to map your POSCAR files into a configuration. Ensure that the properties.calc.json file is written correctly.
 

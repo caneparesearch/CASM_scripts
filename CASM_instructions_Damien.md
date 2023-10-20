@@ -104,7 +104,7 @@ Use ```casm update``` to update the configurations to the master list.
 Then set chemical references for formation energy calculation using ```casm ref --set-auto```.
 
 ## 5. (Optional) Import VASP data
-If you have pre-calculated VASP data, you can import the structures into CASM. Firstly run the vasp_relax_report.py code above to generate the properties.calc.json file for each calculation. Then write a list of the path of the POSCAR files using ```find $(readlink -f .) -name "properties.calc.json" > DFT_data```
+If you have pre-calculated VASP data, you can import the structures into CASM. Firstly run the vasp_relax_report.py code above to generate the properties.calc.json file for each calculation. Then write a list of the path of the properties.calc.json files using ```find $(readlink -f .) -name "properties.calc.json" > DFT_data```
 Create a settings.json file:
 ```
 {
@@ -134,7 +134,7 @@ Then run the following command:
 ```
 casm import --batch DFT_data -s settings.json
 ```
-CASM will attempt to map your POSCAR files into a configuration. Ensure that the properties.calc.json file is written correctly.
+CASM will attempt to map your files into a configuration. Ensure that the properties.calc.json file is written correctly.
 
 ## 6. Fit cluster expansion
 Create the basis set in basis_sets/bset.default/bspecs.json. The recommended value for pairwise basis functions is the radius of the sphere that completely circumscribes the _largest_ supercell you have in your training data. In other words, the longest distance possible in the _largest_ supercell divided by 2.

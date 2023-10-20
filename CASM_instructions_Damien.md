@@ -138,7 +138,7 @@ casm import --batch DFT_data -s settings.json
 CASM will attempt to map your files into a configuration. Ensure that the properties.calc.json file is written correctly.
 
 ## 6. Fit cluster expansion
-Create the basis set in basis_sets/bset.default/bspecs.json. The recommended value for pairwise basis functions is the radius of the sphere that completely circumscribes the _largest_ supercell you have in your training data. In other words, the longest distance possible in the _largest_ supercell divided by 2.
+Create the basis set in basis_sets/bset.default/bspecs.json. The recommended value for pairwise basis functions is the radius of the sphere that completely inscribes the _largest_ supercell you have in your training data. 
 ```
 {
   "basis_function_specs" : {

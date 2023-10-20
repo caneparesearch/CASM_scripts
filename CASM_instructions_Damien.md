@@ -27,6 +27,7 @@ casm composition --select 1
 ```
 
 ## 3. Enumerate supercell data
+*Skip this step if you want to import DFT data from somewhere else.*
 --min and --max sets minimum and maximum supercell size
 --filter includes filtering according to some criteria
 ```

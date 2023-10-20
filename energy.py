@@ -1,5 +1,5 @@
-#!/userhome1/damien/anaconda3/envs/casm_0.3/bin/python 
 # this code is to show energies for adjusting casm fitting
+# Usage: run "python energy {0.5}" where 0.5 is the composition
 import numpy as np
 import os, sys
 import pandas as pd
@@ -39,8 +39,6 @@ min_cx = selected_data.loc[selected_data['E_clex'].idxmin()]
 #sort data
 data = data.sort_values(by=['E_DFT'],ascending=False)
 print(data)
-#print(f"Sum: {abs(data.loc['SCEL4_4_1_1_0_2_1/1','E_clex-E_DFT (meV)'])+abs(data.loc['SCEL6_6_1_1_0_3_2/0','E_clex-E_DFT (meV)'])}")
-#print(f"Diff: {(data.loc['SCEL4_4_1_1_0_2_1/1','E_clex']-data.loc['SCEL6_6_1_1_0_3_2/0','E_clex'])*1000}")
 print ("min E_DFT\t", str(min_dft['E_DFT']),'\tat\t',min_dft.name,'\tweight\t',min_dft['weight'])
 print ("min E_CX\t", str(min_cx['E_clex']),'\tat\t',min_cx.name,'\tweight\t',min_cx['weight'])
 print ("max E_DFT\t", str(max_dft['E_DFT']),'\tat\t',max_dft.name,'\tweight\t',max_dft['weight'])

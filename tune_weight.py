@@ -29,7 +29,7 @@ def read_log(fname): # extract number of ECI, CV and RMS error from fit_log.txt
                 break
     return nselect,cv,rms
 
-def add_weight_field():
+def add_weight_field(): # to add a weight column for the initial casm_learn_input file
     df = read_file('casm_learn_input')
     df['weight'] = np.ones((len(df),1))
     df['selected'] = np.ones((len(df),1))

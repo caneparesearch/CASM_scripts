@@ -50,6 +50,7 @@ class ClusterFunction: # this is used to deal with cluster_function section in e
         self.mult = clex_func_json['mult']
         #self.orbit = clex_func_json['orbit']
         self.prototype = clex_func_json['prototype']
+        self.max_length = float(clex_func_json['prototype']['max_length'])
         #self.prototype_function = clex_func_json['prototype_function']
         if len(self.prototype['sites']) == 0:
             self.category = 'Empty'
@@ -99,17 +100,17 @@ print(quadruplet.get_eff_property_list('normalized_eci'))
 
 fig, ax = plt.subplots(1,figsize=(4,4))
 # draw_stem(ax,point,'index','normalized_eci','#384259','Point')
-draw_stem(ax,pair,'index','normalized_eci','#e74c3c','o','Pair')
-draw_stem(ax,triplet,'index','normalized_eci','#3498db','^','Triplet')
-draw_stem(ax,quadruplet,'index','normalized_eci','#95e1d3','s','Quadruplet')
+draw_stem(ax,pair,'max_length','normalized_eci','#e74c3c','o','Pair')
+draw_stem(ax,triplet,'max_length','normalized_eci','#3498db','^','Triplet')
+draw_stem(ax,quadruplet,'max_length','normalized_eci','#95e1d3','s','Quadruplet')
 
 ax.legend() 
 ax.axhline(y=0, xmin=0.0, xmax=300, marker='', linestyle='--', linewidth=0.5, color="black", antialiased=True, label="")
 ax.set_ylabel('ECI/multiplicity (meV)')
-ax.set_xlabel('Cluster Function Index')
-ax.set_xlim(0,25)
+ax.set_xlabel('Cluster Size (Å)')
+ax.set_xlim(0,13)
 #ax.set_ylim(-100,200)
 ax.yaxis.set_major_locator(MultipleLocator(5))
-ax.xaxis.set_major_locator(MultipleLocator(5))
+ax.xaxis.set_major_locator(MultipleLocator(1))
 fig.tight_layout()
 fig.savefig('eci.pdf')

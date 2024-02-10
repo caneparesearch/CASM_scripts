@@ -343,7 +343,7 @@ $\Phi$ is the grand canonical potential energy, $\Phi = E-TS-\mu x$
 
 $E-\mu x$ is the <potential_energy> in results.json
 
-Next, at each temperature interval, fix temperature and vary $\mu$ across the range determined before. Do both $\mu$_up and $\mu$_down scan. This means that if the $\mu$ range is from 0.2 to 0.4, do 2 separate scans from 0.2-0.4, and from 0.4-0.2. **IMPORTANT**: the starting structure must be from the final structure at the end of the T_up procedure. This is done by changing this part of the monte.json file to the path which contains the final structure:
+Next, at each temperature interval, fix temperature and vary $\mu$ across the range determined before. Do both $\mu$ _up and $\mu$ _down scan. This means that if the $\mu$ range is from 0.2 to 0.4, do 2 separate scans from 0.2-0.4, and from 0.4-0.2. **IMPORTANT**: the starting structure must be from the final structure at the end of the T_up procedure. The starting structure for both $\mu$ _up and $\mu$ _down is different as the ground state at the lower $\mu$ and upper $\mu$ is different! This is done by changing this part of the monte.json file to the path which contains the final structure:
 ```
 "motif" : {
         "configdof" : "../../T_up_0/chempot_-0.60/conditions.1/final_state.json"

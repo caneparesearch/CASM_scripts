@@ -276,7 +276,7 @@ Copy casm_learn_input to a new directory "monte" and move to the directory. Crea
       "dependent_runs": false,
       "mode" : "incremental",
       "motif" : {
-        "configname" : "restricted_auto"
+        "configname" : "auto"
       },
       "initial_conditions" : {
         "param_chem_pot" : {
@@ -305,9 +305,9 @@ Copy casm_learn_input to a new directory "monte" and move to the directory. Crea
     }
   }
 ```
-The above file is for low T to verify that GCMC can reproduce the convex hull. Set $\mu$ by changing the initial conditions and final conditions of "a". Ensure the $\mu$ range can cover the whole composition range. The setting ```"configname" : "restricted_auto"``` ensures that the supercell will be constructed from the structures in your training set.
+The above file is for low T to verify that GCMC can reproduce the convex hull. Set $\mu$ by changing the initial conditions and final conditions of "a". Ensure the $\mu$ range can cover the whole composition range. Ensure that Monte Carlo does not produce any structure below the hull.
 
-After the calculation is complete, the results.json file contains the results at each value of $\mu$. From this, you can choose the range of $\mu$ which corresponds to each region in the 0K convex hull. For example, $\mu$=-0.6 to -0.4 corresponds to x=0 to 0.25, etc.
+To obtain the $\mu$ range of each tangent line in the convex hull, change the setting ```"configname" : "auto"``` to ```"configname" : "restricted_auto"```. This ensures that the supercell will be constructed from the structures in your training set. After the calculation is complete, the results.json file contains the results at each value of $\mu$. From this, you can choose the range of $\mu$ which corresponds to each region in the 0K convex hull. For example, $\mu$=-0.6 to -0.4 corresponds to x=0 to 0.25, etc.
 
 We follow the algorithm in this [paper](https://arxiv.org/pdf/2309.11761.pdf). To obtain the grand canonical potential energy at a specific T and $\mu$, an integration path must be constructed. This means starting from the ground state, raise the temperature at intervals of $\Delta T$ at constant $\mu$ (T_up). this is done by changing the conditions in the monte.json file accordingly:
 ```
